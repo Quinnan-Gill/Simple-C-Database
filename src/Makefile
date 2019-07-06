@@ -1,14 +1,14 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = input.h
-OBJ = db.o input.o
+DEPS = input.h statement.h
+OBJ = db.o input.o statement.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 db: $(OBJ)
-	$(CC) -o db db.o input.o
+	$(CC) -o db $^
 	rm *.o
 
 clean:
-	rm *.o db
+	rm db
