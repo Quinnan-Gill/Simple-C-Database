@@ -1,7 +1,18 @@
 #ifndef _STATEMENT_H_
 #define _STATEMENT_H_
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "input.h"
+#include "row.h"
+
+typedef enum {
+    EXECUTE_SUCCESS,
+    EXECUTE_TABEL_FULL
+} ExecutedResult;
 
 typedef enum {
     META_COMMAND_SUCCESS,
@@ -10,22 +21,15 @@ typedef enum {
 
 typedef enum {
     PREPARE_SUCCESS,
+    PREPARE_SYNTAX_ERROR,
     PREPARE_UNRECOGNIZED_STATEMENT
 } PrepareResult;
-
-#define COLUMN_USERNAME_SIZE 32
-#define COLUMN_EMAIL_SIZE 255
 
 typedef enum {
     STATEMENT_INSERT,
     STATEMENT_SELECT
 } StatementType;
 
-typedef struct {
-    unint32_t id;
-    char username[COLUMN_USERNAME_SIZE];
-    char email[COLUMN_EMAIL_SIZE];
-} Row;
 
 typedef struct {
     StatementType type;
@@ -37,8 +41,8 @@ MetaCommandResult do_meta_command(InputBuffer * input_buffer);
 PrepareResult prepare_statement(InputBuffer* input_buffer,
                                 Statement* statement);
 
-void execute_statement(Statement* statement);
+ExecutedResult execute_statement(Statement* statement, Table* table);
 
-
+void print_row(Row* row);
 
 #endif
