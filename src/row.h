@@ -12,8 +12,8 @@
 
 typedef struct {
     uint32_t id;
-    char username[COLUMN_USERNAME_SIZE];
-    char email[COLUMN_EMAIL_SIZE];
+    char username[COLUMN_USERNAME_SIZE + 1];
+    char email[COLUMN_EMAIL_SIZE + 1];
 } Row;
 
 #define size_of_attribute(Struct, Attribute) sizeof(((Struct*)0)->Attribute)
@@ -36,8 +36,8 @@ static const uint32_t ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
 static const uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
 
 typedef struct {
-    uint32_t num_rows;
     void* pages[TABLE_MAX_PAGES];
+    uint32_t num_rows;
 } Table;
 
 void* row_slot(Table* table, uint32_t row_num);
