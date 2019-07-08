@@ -1,11 +1,14 @@
 #ifndef _ROW_H_
 #define _ROW_H_
 
+#include <errno.h>
+#include <fcntl.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #define COLUMN_USERNAME_SIZE 32
 #define COLUMN_EMAIL_SIZE 255
@@ -36,7 +39,13 @@ static const uint32_t ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
 static const uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
 
 typedef struct {
-    void* pages[TABLE_MAX_PAGES];
+    int file_descriptor;
+    uint32_t file_length;
+    void *pages[TABLE_MAX_PAGES];
+} Pager;
+
+typedef struct {
+    Pager* pager;
     uint32_t num_rows;
 } Table;
 
@@ -44,6 +53,15 @@ void* row_slot(Table* table, uint32_t row_num);
 
 Table* new_table();
 
-void free_table(Table* table);
+void* get_page(Pager* pager, uint32_t page_num);
+
+Table* db_open(const char* filename);
+
+Pager* pager_open(const char* filename);
+
+void pager_flush(Pager* pager, uint32_t page_num, uint32_t size);
+
+void db_close(Table* table);
+
 
 #endif

@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = input.h statement.h row.h
-OBJ = db.o input.o statement.o row.o
+DEPS = input.h statement.h table.h
+OBJ = db.o input.o statement.o table.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

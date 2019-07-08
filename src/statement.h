@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "input.h"
-#include "row.h"
+#include "table.h"
 
 typedef enum {
     EXECUTE_SUCCESS,
@@ -38,7 +38,7 @@ typedef struct {
     Row row_to_insert; // only used by insert statement
 } Statement;
 
-MetaCommandResult do_meta_command(InputBuffer * input_buffer);
+MetaCommandResult do_meta_command(InputBuffer * input_buffer, Table* table);
 
 PrepareResult prepare_statement(InputBuffer* input_buffer,
                                 Statement* statement);
