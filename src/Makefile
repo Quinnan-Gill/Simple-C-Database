@@ -11,5 +11,4 @@ db: $(OBJ)
 	rm *.o
 
 clean:
-	rm -rf *.o
-	rm db
+	rm *.o *.db db
