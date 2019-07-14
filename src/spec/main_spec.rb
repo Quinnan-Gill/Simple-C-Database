@@ -7,7 +7,11 @@ describe 'database' do
         raw_output = nil
         IO.popen("./db test.db", "r+") do |pipe|
             commands.each do |command|
-                pipe.puts command
+                begin
+                    pipe.puts command
+                rescue Errno::EPIPE
+                    break
+                end
             end
 
             pipe.close_write
@@ -32,7 +36,7 @@ describe 'database' do
         ])
     end
 
-    skip 'prints error message when table is full' do
+    it 'prints error message when table is full' do
         script = (1..1401).map do |i|
             "insert #{i} user#{i} person#{i}@example.com"
         end
@@ -40,7 +44,7 @@ describe 'database' do
         result = run_script(script)
         expect(result.last(2)).to match_array([
             "db > Executed.",
-            "db > Need to implement splitting internal node",
+            "db > Need to implement updating parent after split",
         ])
     end
 
@@ -196,7 +200,8 @@ describe 'database' do
             "    - 12",
             "    - 13",
             "    - 14",
-            "db > Need to implement searching an internal node",
+            "db > Executed.",
+            "db > ",
         ])
     end
 end
