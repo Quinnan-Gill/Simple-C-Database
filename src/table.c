@@ -507,6 +507,12 @@ void internal_node_insert(Table* table, uint32_t parent_page_num,
     uint32_t right_child_page_num = *internal_node_right_child(parent);
     void* right_child = get_page(table->pager, right_child_page_num);
 
+#ifdef DEBUG
+    printf("\nget_right_max_key: %d\n", get_node_max_key(right_child));
+    printf("\nget_child_max_key: %d\n", child_max_key);
+    printf("\nindex: %d\n", index);
+#endif
+
     if (child_max_key > get_node_max_key(right_child)) {
         /* Replace right child */
         *internal_node_child(parent, original_num_keys) = right_child_page_num;

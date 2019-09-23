@@ -124,8 +124,12 @@ static const uint32_t LEAF_NODE_VALUE_OFFSET =
     LEAF_NODE_KEY_OFFSET + LEAF_NODE_KEY_SIZE;
 static const uint32_t LEAF_NODE_CELL_SIZE = LEAF_NODE_KEY_SIZE + LEAF_NODE_VALUE_SIZE;
 static const uint32_t LEAF_NODE_SPACE_FOR_CELLS =  PAGE_SIZE - LEAF_NODE_HEADER_SIZE;
+#ifdef DEBUG
+static const uint32_t LEAF_NODE_MAX_CELLS = 3;
+#else
 static const uint32_t LEAF_NODE_MAX_CELLS =
     LEAF_NODE_SPACE_FOR_CELLS / LEAF_NODE_CELL_SIZE;
+#endif
 
 static const uint32_t LEAF_NODE_RIGHT_SPLIT_COUNT = (LEAF_NODE_MAX_CELLS + 1) / 2;
 static const uint32_t LEAF_NODE_LEFT_SPLIT_COUNT =
@@ -152,6 +156,10 @@ static const uint32_t INTERNAL_NODE_CELL_SIZE =
     INTERNAL_NODE_CHILD_SIZE + INTERNAL_NODE_KEY_SIZE;
 /* Keep this small for testing */
 static const uint32_t INTERNAL_NODE_MAX_CELLS = 3;
+
+static const uint32_t INTERNAL_NODE_RIGHT_SPLIT_COUNT = (INTERNAL_NODE_MAX_CELLS + 1) / 2;
+static const uint32_t INTERNAL_NODE_LEFT_CHILD_SIZE =
+  (INTERNAL_NODE_MAX_CELLS + 1) - INTERNAL_NODE_RIGHT_SPLIT_COUNT;
 
 /*
  * Root Nodes
@@ -211,6 +219,8 @@ void update_internal_node_key(void* node, uint32_t old_key, uint32_t new_key);
 
 void internal_node_insert(Table* table, uint32_t parent_page_num,
                           uint32_t child_page_num);
+
+void leaf_node_split_and_insert(Cursor* cursor, uint32_t key, Row* value);
 
 /*
  * General Node Info

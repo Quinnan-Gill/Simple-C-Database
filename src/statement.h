@@ -48,6 +48,8 @@ PrepareResult prepare_insert(InputBuffer* input_buffer, Statement* statement);
 
 ExecutedResult execute_statement(Statement* statement, Table* table);
 
+void debug_set();
+
 void print_row(Row* row);
 
 #endif

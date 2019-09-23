@@ -13,6 +13,10 @@ MetaCommandResult do_meta_command(InputBuffer* input_buffer, Table* table) {
         printf("Tree:\n");
         print_tree(table->pager, 0, 0);
         return META_COMMAND_SUCCESS;
+    } else if (strcmp(input_buffer->buffer, ".debug") == 0) {
+        printf("DEBUG: ");
+        debug_set();
+        return META_COMMAND_SUCCESS;
     } else {
         return META_COMMAND_UNRECOGNIZED_COMMAND;
     }
@@ -105,6 +109,14 @@ ExecutedResult execute_statement(Statement* statement, Table* table) {
         case (STATEMENT_SELECT):
             return execute_select(statement, table);
     }
+}
+
+void debug_set() {
+#ifdef DEBUG
+    printf("YES\n");
+#else
+    printf("NO\n");
+#endif
 }
 
 void print_row(Row* row) {

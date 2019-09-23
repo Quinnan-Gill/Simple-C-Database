@@ -1,14 +1,20 @@
 CC=gcc
-CFLAGS=-I.
-DEPS = input.h statement.h table.h
+INCFLAGS=-I.
+DEPS = *.h
 OBJ = db.o input.o statement.o table.o
+CFLAGS = -c -g
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+all: db
 
+debug: CFLAGS += -DDEBUG
+debug: db
+	
 db: $(OBJ)
 	$(CC) -o db $^
 	rm *.o
+
+%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -o $@ $< $(INCFLAGS)
 
 clean:
 	rm *.o *.db db
