@@ -32,7 +32,7 @@ describe 'database' do
             "db > Executed.",
             "db > (1, user1, person1@example.com)",
             "Executed.",
-            "db > ",
+            "db > ", 
         ])
     end
 
@@ -44,7 +44,7 @@ describe 'database' do
         result = run_script(script)
         expect(result.last(2)).to match_array([
             "db > Executed.",
-            "db > Need to implement splitting internal node",
+            "db > Tried to fetch page number out of bounds. 101 > 100",
         ])
     end
 
@@ -312,5 +312,22 @@ describe 'database' do
             "(15, user15, person15@example.com)",
             "Executed.", "db > ",
         ])
+    end
+
+    it 'prints allows max page numbers' do
+        script = (1..100).map do |i|
+            "insert #{i} user#{i} person#{i}@example.com"
+        end
+        script << "select"
+        script << ".exit"
+        result = run_script(script)
+
+        exp = ["db > (1, user1, person1@example.com)"]
+        exp += (2..100).map do |i|
+            "(#{i}, user#{i}, person#{i}@example.com)"
+        end
+        exp << "Executed."
+
+        expect(result[100...result.length-1]).to match_array(exp)
     end
 end
