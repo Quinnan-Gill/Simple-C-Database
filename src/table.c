@@ -562,7 +562,15 @@ void internal_node_split_and_insert(Table* table, uint32_t parent_page_num) {
     *(internal_node_num_keys(new_node)) = INTERNAL_NODE_RIGHT_SPLIT_COUNT;
 
     if (is_node_root(parent)) {
-        create_new_root(table, new_page_num);
+        return create_new_root(table, new_page_num);
+    } else {
+        uint32_t grandparent_page_num = *node_parent(parent);
+        uint32_t new_max = get_node_max_key(parent);
+        void* grandparent = get_page(table->pager, grandparent_page_num);
+
+        update_internal_node_key(grandparent, old_max, new_max);
+        internal_node_insert(table, grandparent_page_num, new_page_num);
+        return;
     }
 }
 
@@ -571,7 +579,6 @@ void internal_remove_max_key(void *node) {
     *internal_node_right_child(node) = *internal_node_child(node, num_keys-1);
 
     *(internal_node_num_keys(node)) = num_keys-1;
-
 }
 
 /*
@@ -600,7 +607,7 @@ void print_constants() {
 
 void indent(uint32_t level) {
     for (uint32_t i = 0; i < level; i++) {
-        printf("  ");
+        printf("    ");
     }
 }
 
