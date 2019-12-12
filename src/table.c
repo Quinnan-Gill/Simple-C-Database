@@ -648,41 +648,45 @@ void pretty_print_tree(Pager* pager, uint32_t page_num) {
     uint32_t num_keys, child;
     DataCapsule *dataNode;
 
-    Queue *q = (Queue *)malloc(sizeof(Queue));
+    Queue *q = (Queue *) malloc(sizeof(Queue));
     init(q);
     push_deconstructed(q, page_num, true);
-    
+
     while (!empty(q)) {
         dataNode = front(q);
         node = get_page(pager, dataNode->data);
-        
-        switch(get_node_type(node)) {
+
+        printf("<");
+        switch (get_node_type(node)) {
             case (NODE_LEAF):
                 num_keys = *leaf_node_num_cells(node);
-                for(uint32_t i = 0; i < num_keys; i++) {
-                    printf(" %d", *leaf_node_key(node, i));
+                for (uint32_t i = 0; i < num_keys; i++) {
+                    if (i == num_keys-1) {
+                        printf("%d", *leaf_node_key(node, i));
+                    } else {
+                        printf("%d ", *leaf_node_key(node, i));
+                    }
                 }
                 break;
-            case (NODE_INTERNAL):
+            case (NODE_INTERNAL): 
                 num_keys = *internal_node_num_keys(node);
                 for (uint32_t i=0; i < num_keys; i++) {
                     child = *internal_node_child(node, i);
                     if (i == num_keys-1) {
-                        push_deconstructed(q, child, true);
+                        printf("%d", *internal_node_key(node, i));
                     } else {
-                        push_deconstructed(q, child, false);
+                        printf("%d ", *internal_node_key(node, i));
                     }
-                    printf(" %d", *internal_node_key(node, i));
+                    push_deconstructed(q, child, false);
                 }
+                child = *internal_node_right_child(node);
+                push_deconstructed(q, child, true);
                 break;
         }
-        printf(" | ");
-        if (dataNode->endln) {
+        printf("> ");
+        if(dataNode->endln) {
             printf("\n");
         }
         pop(q);
     }
-    printf("\n");
-
-    free(q);
 }

@@ -31,7 +31,7 @@ import random
 #     "insert 24 user24 person24@example.com",
 #     "insert 25 user25 person25@example.com",
 #     "insert 28 user28 person28@example.com",
-#     ".pretty",
+#     ".alttree",
 #     ".exit",
 # ]
 

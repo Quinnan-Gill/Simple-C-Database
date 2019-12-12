@@ -13,7 +13,7 @@ typedef struct {
     bool endln;
 } DataCapsule;
 
-struct QueueNode{
+struct QueueNode {
     DataCapsule *data;
     struct QueueNode *next;
 };

@@ -13,8 +13,8 @@ MetaCommandResult do_meta_command(InputBuffer* input_buffer, Table* table) {
         printf("Tree:\n");
         print_tree(table->pager, 0, 0);
         return META_COMMAND_SUCCESS;
-    } else if (strcmp(input_buffer->buffer, ".pretty") == 0) {
-        printf("Pretty Tree:\n");
+    } else if (strcmp(input_buffer->buffer, ".alttree") == 0) {
+        printf("Alternative Tree:\n");
         pretty_print_tree(table->pager, 0);
         return META_COMMAND_SUCCESS;
     } else if (strcmp(input_buffer->buffer, ".debug") == 0) {
