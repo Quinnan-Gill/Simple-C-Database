@@ -507,12 +507,6 @@ void internal_node_insert(Table* table, uint32_t parent_page_num,
     uint32_t right_child_page_num = *internal_node_right_child(parent);
     void* right_child = get_page(table->pager, right_child_page_num);
 
-#ifdef DEBUG
-    printf("\nget_right_max_key: %d\n", get_node_max_key(right_child));
-    printf("\nget_child_max_key: %d\n", child_max_key);
-    printf("\nindex: %d\n", index);
-#endif
-
     if (child_max_key > get_node_max_key(right_child)) {
         /* Replace right child */
         *internal_node_child(parent, original_num_keys) = right_child_page_num;
@@ -590,5 +584,53 @@ void print_tree(Pager* pager, uint32_t page_num, uint32_t indentation_level) {
             child = *internal_node_right_child(node);
             print_tree(pager, child, indentation_level + 1);
             break;
+    }
+}
+
+void pretty_print_tree(Pager* pager, uint32_t page_num) {
+    void* node;
+    uint32_t num_keys, child;
+    DataCapsule *dataNode;
+
+    Queue *q = (Queue *) malloc(sizeof(Queue));
+    init(q);
+    push_deconstructed(q, page_num, true);
+
+    while (!empty(q)) {
+        dataNode = front(q);
+        node = get_page(pager, dataNode->data);
+
+        printf("<");
+        switch (get_node_type(node)) {
+            case (NODE_LEAF):
+                num_keys = *leaf_node_num_cells(node);
+                for (uint32_t i = 0; i < num_keys; i++) {
+                    if (i == num_keys-1) {
+                        printf("%d", *leaf_node_key(node, i));
+                    } else {
+                        printf("%d ", *leaf_node_key(node, i));
+                    }
+                }
+                break;
+            case (NODE_INTERNAL): 
+                num_keys = *internal_node_num_keys(node);
+                for (uint32_t i=0; i < num_keys; i++) {
+                    child = *internal_node_child(node, i);
+                    if (i == num_keys-1) {
+                        printf("%d", *internal_node_key(node, i));
+                    } else {
+                        printf("%d ", *internal_node_key(node, i));
+                    }
+                    push_deconstructed(q, child, false);
+                }
+                child = *internal_node_right_child(node);
+                push_deconstructed(q, child, true);
+                break;
+        }
+        printf("> ");
+        if(dataNode->endln) {
+            printf("\n");
+        }
+        pop(q);
     }
 }
