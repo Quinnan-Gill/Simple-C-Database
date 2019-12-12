@@ -6,7 +6,7 @@ void init(Queue *q) {
   q->size = 0;
 }
 
-int front(Queue *q) {
+DataCapsule* front(Queue *q) {
   return q->front->data;
 }
 
@@ -15,10 +15,11 @@ void pop(Queue *q) {
 
   struct QueueNode *tmp = q->front;
   q->front = q->front->next;
+  free(tmp->data);
   free(tmp);
 }
 
-void push(Queue *q, uint32_t data) {
+void push(Queue *q, DataCapsule *data) {
   q->size++;
 
   if (q->front == NULL) {
@@ -32,6 +33,14 @@ void push(Queue *q, uint32_t data) {
     q->last->next->next = NULL;
     q->last = q->last->next;
   }
+}
+
+void push_deconstructed(Queue *q, DATA_T data, bool endln) {
+  DataCapsule *dataCap = (DataCapsule *)malloc(sizeof(DataCapsule));
+  dataCap->data = data;
+  dataCap->endln = endln;
+  
+  push(q, dataCap);
 }
 
 bool empty(Queue *q) {

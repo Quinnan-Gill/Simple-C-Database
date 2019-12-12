@@ -6,8 +6,15 @@
 #include <limits.h>
 #include <stdbool.h>
 
+#define DATA_T uint32_t
+
+typedef struct {
+    DATA_T data;
+    bool endln;
+} DataCapsule;
+
 struct QueueNode{
-    uint32_t data;
+    DataCapsule *data;
     struct QueueNode *next;
 };
 
@@ -19,11 +26,13 @@ typedef struct {
 
 void init(Queue *q);
 
-int front(Queue *q);
+DataCapsule* front(Queue *q);
 
 void pop(Queue *q);
 
-void push(Queue *q, uint32_t data);
+void push(Queue *q, DataCapsule *data);
+
+void push_deconstructed(Queue *q, DATA_T data, bool endln);
 
 bool empty(Queue *q);
 
