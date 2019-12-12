@@ -1,7 +1,7 @@
 CC=gcc
 INCFLAGS=-I.
 DEPS = *.h
-OBJ = db.o input.o statement.o table.o
+OBJ = db.o input.o statement.o queue.o table.o
 CFLAGS = -c -g
 
 all: db

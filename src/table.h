@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "queue.h"
+
 #define COLUMN_USERNAME_SIZE 32
 #define COLUMN_EMAIL_SIZE 255
 
@@ -237,5 +239,7 @@ void print_constants();
 void indent(uint32_t level);
 
 void print_tree(Pager* pager, uint32_t page_num, uint32_t indentation_level);
+
+void pretty_print_tree(Pager* pager, uint32_t page_num);
 
 #endif
