@@ -466,6 +466,21 @@ uint32_t get_node_max_key(void* node) {
     }
 }
 
+uint32_t get_node_max_descendant(Table* table, void* node) {
+    uint32_t right_child_page_num;
+    void* right_child;
+
+    switch (get_node_type(node)) {
+        case NODE_INTERNAL:
+            right_child_page_num = *internal_node_right_child(node);
+            right_child = get_page(table->pager, right_child_page_num);
+            // return *internal_node_key(node, *internal_node_num_keys(node) - 1);
+            return get_node_max_descendant(table, right_child);
+        case NODE_LEAF:
+            return *leaf_node_key(node, *leaf_node_num_cells(node) - 1);
+    }
+}
+
 void initialize_interal_node(void* node) {
     set_node_type(node, NODE_INTERNAL);
     set_node_root(node, false);
@@ -522,8 +537,11 @@ void internal_node_insert(Table* table, uint32_t parent_page_num,
     */
 
     void* parent = get_page(table->pager, parent_page_num);
+    printf("================\n");
+    print_tree(table->pager, parent_page_num, 0);
+    printf("================\n");
     void* child = get_page(table->pager, child_page_num);
-    uint32_t child_max_key = get_node_max_key(child);
+    uint32_t child_max_key = get_node_max_descendant(table, child);
     uint32_t index = internal_node_find_child(parent, child_max_key);
 
     uint32_t original_num_keys = *internal_node_num_keys(parent);

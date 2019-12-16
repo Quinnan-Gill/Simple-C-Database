@@ -235,6 +235,8 @@ script = [
     ".btree",
     "insert 13 user13 person16@example.com",
     ".btree",
+    "insert 32 user32 person16@example.com",
+    ".btree",
     # ".alttree",
     # "insert 1 user1 person1@example.com",
     # ".btree",

@@ -209,6 +209,8 @@ uint32_t* internal_node_key(void* node, uint32_t key_num);
 
 uint32_t get_node_max_key(void* node);
 
+uint32_t get_node_max_descendant(Table* table, void* node);
+
 void set_node_root(void* node, bool is_root);
 
 void initialize_interal_node(void* node);
