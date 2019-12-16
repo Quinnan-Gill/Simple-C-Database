@@ -30,7 +30,8 @@ typedef enum {
 
 typedef enum {
     STATEMENT_INSERT,
-    STATEMENT_SELECT
+    STATEMENT_SELECT,
+    STATEMENT_DELETE
 } StatementType;
 
 
@@ -47,6 +48,10 @@ PrepareResult prepare_statement(InputBuffer* input_buffer,
 PrepareResult prepare_insert(InputBuffer* input_buffer, Statement* statement);
 
 ExecutedResult execute_statement(Statement* statement, Table* table);
+
+PrepareResult prepare_delete(InputBuffer* input_buffer, Statement* statement);
+
+ExecutedResult execute_delete(Statement* statement, Table* table);
 
 void debug_set();
 

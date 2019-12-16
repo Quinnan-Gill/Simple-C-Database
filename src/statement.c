@@ -35,6 +35,9 @@ PrepareResult prepare_statement(InputBuffer* input_buffer,
         statement->type = STATEMENT_SELECT;
         return PREPARE_SUCCESS;
     }
+    if (strncmp(input_buffer->buffer, "delete", 6) == 0) {
+        return prepare_delete(input_buffer, statement);
+    }
 
     return PREPARE_UNRECOGNIZED_STATEMENT;
 }
@@ -65,6 +68,26 @@ PrepareResult prepare_insert(InputBuffer* input_buffer, Statement* statement) {
     statement->row_to_insert.id = id;
     strcpy(statement->row_to_insert.username, username);
     strcpy(statement->row_to_insert.email, email);
+
+    return PREPARE_SUCCESS;
+}
+
+PrepareResult prepare_delete(InputBuffer* input_buffer, Statement* statement) {
+    statement->type = STATEMENT_DELETE;
+
+    char* keyword = strtok(input_buffer->buffer, " ");
+    char* id_string = strtok(NULL, " ");
+
+    if (id_string == NULL) {
+        return PREPARE_SYNTAX_ERROR;
+    }
+
+    int id = atoi(id_string);
+    if (id < 0) {
+        return PREPARE_NEGATIVE_ID;
+    }
+
+    statement->row_to_insert.id = id;
 
     return PREPARE_SUCCESS;
 }
@@ -106,12 +129,20 @@ ExecutedResult execute_select(Statement* statement, Table* table) {
     return EXECUTE_SUCCESS;
 }
 
+ExecutedResult execute_delete(Statement* statement, Table* table) {
+    printf("Delete %d\n", statement->row_to_insert.id);
+    
+    return EXECUTE_SUCCESS;
+}
+
 ExecutedResult execute_statement(Statement* statement, Table* table) {
     switch (statement->type) {
         case (STATEMENT_INSERT):
             return execute_insert(statement, table);
         case (STATEMENT_SELECT):
             return execute_select(statement, table);
+        case (STATEMENT_DELETE): 
+            return execute_delete(statement, table);
     }
 }
 
