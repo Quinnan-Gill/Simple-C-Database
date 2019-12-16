@@ -537,9 +537,6 @@ void internal_node_insert(Table* table, uint32_t parent_page_num,
     */
 
     void* parent = get_page(table->pager, parent_page_num);
-    printf("================\n");
-    print_tree(table->pager, parent_page_num, 0);
-    printf("================\n");
     void* child = get_page(table->pager, child_page_num);
     uint32_t child_max_key = get_node_max_descendant(table, child);
     uint32_t index = internal_node_find_child(parent, child_max_key);
@@ -655,8 +652,11 @@ void print_constants() {
 
 void indent(uint32_t level) {
     for (uint32_t i = 0; i < level; i++) {
-        // printf("    ");
+#ifndef DEBUG
+        printf("  ");
+#else
         printf("||||");
+#endif
     }
 }
 
@@ -668,11 +668,11 @@ void print_tree(Pager* pager, uint32_t page_num, uint32_t indentation_level) {
     switch(get_node_type(node)) {
         case (NODE_LEAF):
             num_keys = *leaf_node_num_cells(node);
-// #ifdef DEBUG
-//             parent = *node_parent(node);
-//             indent(indentation_level);
-//             printf("- (page_num: %d, parent: %d)\n", page_num, parent);
-// #endif
+#ifdef EXTDEBUG
+            parent = *node_parent(node);
+            indent(indentation_level);
+            printf("- (page_num: %d, parent: %d)\n", page_num, parent);
+#endif
             indent(indentation_level);
             printf("- leaf (size %d)\n", num_keys);
             for (uint32_t i  = 0; i < num_keys; i++) {
@@ -682,11 +682,11 @@ void print_tree(Pager* pager, uint32_t page_num, uint32_t indentation_level) {
             break;
         case (NODE_INTERNAL):
             num_keys = *internal_node_num_keys(node);
-// #ifdef DEBUG
-//             parent = *node_parent(node);
-//             indent(indentation_level);
-//             printf("- (page_num: %d, parent: %d)\n", page_num, parent);
-// #endif
+#ifdef EXTDEBUG
+            parent = *node_parent(node);
+            indent(indentation_level);
+            printf("- (page_num: %d, parent: %d)\n", page_num, parent);
+#endif
             indent(indentation_level);
             printf("- internal (size %d)\n", num_keys);
             for (uint32_t i = 0; i < num_keys; i++) {

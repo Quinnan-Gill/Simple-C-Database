@@ -198,59 +198,66 @@ import random
 #     ".exit",
 # ]
 
+# script = [
+#     "insert 18 user18 person18@example.com",
+#     "select",
+#     "insert 7 user7 person7@example.com",
+#     "select",
+#     "insert 10 user10 person10@example.com",
+#     "select",
+#     "insert 29 user29 person29@example.com",
+#     ".btree",
+#     "insert 23 user23 person23@example.com",
+#     ".btree",
+#     "insert 4 user4 person4@example.com",
+#     ".btree",
+#     "insert 14 user14 person14@example.com",
+#     ".btree",
+#     "insert 30 user30 person30@example.com",
+#     ".btree",
+#     "insert 15 user15 person15@example.com",
+#     ".btree",
+#     "insert 26 user26 person26@example.com",
+#     ".btree",
+#     "insert 22 user22 person22@example.com",
+#     ".btree",
+#     ".alttree",
+#     "insert 19 user19 person19@example.com",
+#     ".btree",
+#     ".alttree",
+#     "insert 2 user2 person2@example.com",
+#     # "insert 16 user16 person16@example.com"
+#     ".btree",
+#     ".alttree",
+#     "insert 16 user16 person16@example.com",
+#     ".btree",
+#     "insert 12 user12 person16@example.com",
+#     ".btree",
+#     "insert 13 user13 person16@example.com",
+#     ".btree",
+#     "insert 33 user33 person33@example.com",
+#     ".btree",
+#     "insert 24 user24 person24@example.com",
+#     ".btree",
+#     # ".alttree",
+#     # "insert 1 user1 person1@example.com",
+#     # ".btree",
+#     # "insert 21 user21 person21@example.com",
+#     # ".btree",
+#     # "insert 11 user11 person11@example.com",
+#     # ".alttree",
+#     # ".btree",
+#     ".exit"
+# ]
+
 script = [
-    "insert 18 user18 person18@example.com",
-    "select",
-    "insert 7 user7 person7@example.com",
-    "select",
-    "insert 10 user10 person10@example.com",
-    "select",
-    "insert 29 user29 person29@example.com",
-    ".btree",
-    "insert 23 user23 person23@example.com",
-    ".btree",
-    "insert 4 user4 person4@example.com",
-    ".btree",
-    "insert 14 user14 person14@example.com",
-    ".btree",
-    "insert 30 user30 person30@example.com",
-    ".btree",
-    "insert 15 user15 person15@example.com",
-    ".btree",
-    "insert 26 user26 person26@example.com",
-    ".btree",
-    "insert 22 user22 person22@example.com",
-    ".btree",
-    ".alttree",
-    "insert 19 user19 person19@example.com",
-    ".btree",
-    ".alttree",
-    "insert 2 user2 person2@example.com",
-    # "insert 16 user16 person16@example.com"
-    ".btree",
-    ".alttree",
-    "insert 16 user16 person16@example.com",
-    ".btree",
-    "insert 12 user12 person16@example.com",
-    ".btree",
-    "insert 13 user13 person16@example.com",
-    ".btree",
-    "insert 32 user32 person16@example.com",
-    ".btree",
-    # ".alttree",
-    # "insert 1 user1 person1@example.com",
-    # ".btree",
-    # "insert 21 user21 person21@example.com",
-    # ".btree",
-    # "insert 11 user11 person11@example.com",
-    # ".alttree",
-    # ".btree",
-    ".exit"
+    "insert %d user%d person%d@example.com"%(i, i, i) for i in range(1, 101)
 ]
 
-# script = [
-#     "insert %d user%d person%d@example.com"%(i, i, i) for i in range(1, 1401)
-# ]
+script += [
+    "select",
+    ".exit"
+]
 
 
 for spec in script:

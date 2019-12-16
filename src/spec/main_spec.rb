@@ -374,4 +374,8 @@ describe 'database' do
 
         expect(result[100...result.length-1]).to match_array(exp)
     end
+
+    after do
+        `rm -rf test.db`
+    end
 end

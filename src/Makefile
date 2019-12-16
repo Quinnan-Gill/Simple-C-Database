@@ -8,6 +8,9 @@ all: db
 
 debug: CFLAGS += -DDEBUG
 debug: db
+
+extDebug: CFLAGS += -DDEBUG -DEXTDEBUG
+extDebug: db
 	
 db: $(OBJ)
 	$(CC) -o db $^
