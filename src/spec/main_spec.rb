@@ -32,7 +32,7 @@ describe 'database' do
             "db > Executed.",
             "db > (1, user1, person1@example.com)",
             "Executed.",
-            "db > ", 
+            "db > ",
         ])
     end
 

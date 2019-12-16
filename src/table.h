@@ -168,7 +168,7 @@ static const uint32_t INTERNAL_NODE_LEFT_SPLIT_COUNT =
  */
 void create_new_root(Table* table, uint32_t right_child_page_num);
 
-void reset_parents_after_root(Table* table, uint32_t parent_page_num);
+void reset_parents(Table* table, uint32_t parent_page_num);
 
 bool is_node_root(void* node);
 

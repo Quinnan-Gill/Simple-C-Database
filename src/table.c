@@ -239,17 +239,19 @@ void create_new_root(Table* table, uint32_t right_child_page_num) {
     uint32_t left_child_max_key = get_node_max_key(left_child);
     *internal_node_key(root, 0) = left_child_max_key;
     *internal_node_right_child(root) = right_child_page_num;
-    // *node_parent(left_child) = table->root_page_num;
-    // *node_parent(right_child) = table->root_page_num;
 
     if (get_node_type(left_child) == NODE_INTERNAL) {
         internal_remove_max_key(left_child);
     }
 
-    reset_parents_after_root(table, table->root_page_num);
+    reset_parents(table, table->root_page_num);
 }
 
-void reset_parents_after_root(Table* table, uint32_t parent_page_num) {
+void reset_parents(Table* table, uint32_t parent_page_num) {
+    /*
+     * This recursively resets all the parent referenes for given page
+     */
+
     void* parent = get_page(table->pager, parent_page_num);
 
     if (get_node_type(parent) == NODE_LEAF) {
@@ -265,12 +267,12 @@ void reset_parents_after_root(Table* table, uint32_t parent_page_num) {
         child = get_page(table->pager, child_page_num);
         
         *node_parent(child) = parent_page_num;
-        reset_parents_after_root(table, child_page_num);
+        reset_parents(table, child_page_num);
     }
     child_page_num = *internal_node_right_child(parent);
     child = get_page(table->pager, child_page_num);
     *node_parent(child) = parent_page_num;
-    reset_parents_after_root(table, child_page_num);
+    reset_parents(table, child_page_num);
 }
 
 bool is_node_root(void* node) {
@@ -474,7 +476,7 @@ uint32_t get_node_max_descendant(Table* table, void* node) {
         case NODE_INTERNAL:
             right_child_page_num = *internal_node_right_child(node);
             right_child = get_page(table->pager, right_child_page_num);
-            // return *internal_node_key(node, *internal_node_num_keys(node) - 1);
+            
             return get_node_max_descendant(table, right_child);
         case NODE_LEAF:
             return *leaf_node_key(node, *leaf_node_num_cells(node) - 1);
@@ -612,7 +614,7 @@ void internal_node_split_and_insert(Table* table, uint32_t parent_page_num) {
         update_internal_node_key(grandparent, old_max, new_max);
         internal_node_insert(table, grandparent_page_num, new_page_num);
 
-        reset_parents_after_root(table, grandparent_page_num);
+        reset_parents(table, grandparent_page_num);
 
         internal_remove_max_key(parent);
         return;
