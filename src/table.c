@@ -249,7 +249,7 @@ void create_new_root(Table* table, uint32_t right_child_page_num) {
 
 void reset_parents(Table* table, uint32_t parent_page_num) {
     /*
-     * This recursively resets all the parent referenes for given page
+     Recursively resets all the parent referenes for given page
      */
 
     void* parent = get_page(table->pager, parent_page_num);
@@ -476,7 +476,7 @@ uint32_t get_node_max_descendant(Table* table, void* node) {
         case NODE_INTERNAL:
             right_child_page_num = *internal_node_right_child(node);
             right_child = get_page(table->pager, right_child_page_num);
-            
+
             return get_node_max_descendant(table, right_child);
         case NODE_LEAF:
             return *leaf_node_key(node, *leaf_node_num_cells(node) - 1);
