@@ -512,22 +512,7 @@ Cursor* internal_node_find(Table* table, uint32_t page_num, uint32_t key) {
 
 void update_internal_node_key(void* node, uint32_t old_key, uint32_t new_key) {
     uint32_t old_child_index = internal_node_find_child(node, old_key);
-    uint32_t num_keys = *internal_node_num_keys(node);
-    for (uint32_t i = 0; i < num_keys; i++) {
-        printf("!%d ", *internal_node_key(node, i));
-    }
-    printf("\n");
-    printf("!old_key: %d\n", old_key);
-    printf("!new_key: %d\n", new_key);
-    printf("!old_child_index: %d\n", old_child_index);
-
     *internal_node_key(node, old_child_index) = new_key;
-
-    num_keys = *internal_node_num_keys(node);
-    for (uint32_t i = 0; i < num_keys; i++) {
-        printf("!%d ", *internal_node_key(node, i));
-    }
-    printf("\n");
 }
 
 void internal_node_insert(Table* table, uint32_t parent_page_num,
